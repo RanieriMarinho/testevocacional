@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pequeno Sol - Clínica Pediátrica</title>
+  <style>
+    :root {
+      --primary: #4A90E2;
+      --secondary: #50E3C2;
+      --accent: #FF7E67;
+      --bg: #F4F8FA;
+      --card-bg: #FFFFFF;
+      --text: #2C3E50;
+      --border: #E1E8ED;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 20px; padding-bottom: 140px; }
+    
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    nav { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    nav button {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid white;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    nav button.active, nav button:hover {
+      background: white;
+      color: var(--primary);
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+    .grid-1-1 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 768px) { 
+      .grid, .grid-1-1 { grid-template-columns: 1fr; } 
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border: 1px solid var(--border);
+    }
+
+    .card h2 { color: var(--primary); margin-bottom: 15px; font-size: 1.2rem; }
+
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+    }
+    .btn:hover { background: #357ABD; }
+
+    /* GALERIA DE IMAGENS */
+    .kids-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .kids-gallery img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 3px solid white;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease;
+    }
+
+    .kids-gallery img:hover {
+      transform: scale(1.03);
+    }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    th { color: var(--primary); }
+
+    .badge {
+      background: #EBF5FF;
+      color: var(--primary);
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+    .vacinacao-list { list-style: none; display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+    .vacinacao-list li { background: #E6F9F5; color: #0C9D7B; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; }
+
+    /* RODAPÉ */
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: var(--text);
+      color: white;
+      padding: 15px 20px;
+      font-size: 0.85rem;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      z-index: 900;
+    }
+
+    .footer-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .endereco-link {
+      color: var(--secondary);
+      text-decoration: underline;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .endereco-link:hover { color: white; }
+
+    /* CHATBOT */
+    #chatbot-btn {
+      position: fixed;
+      bottom: 75px;
+      right: 20px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 20px;
+      font-weight: bold;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 1000;
+    }
+
+    #chatbot-modal {
+      position: fixed;
+      bottom: 130px;
+      right: 20px;
+      width: 360px;
+      max-width: 90vw;
+      height: 460px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      display: none;
+      flex-direction: column;
+      z-index: 1000;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: var(--primary);
+      color: white;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+    }
+
+    .chat-header button { background: transparent; border: none; color: white; font-size: 1.2rem; cursor: pointer; }
+
+    .chat-body {
+      flex: 1;
+      padding: 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #FAFBFD;
+    }
+
+    .msg { max-width: 85%; padding: 10px 12px; border-radius: 12px; font-size: 0.85rem; line-height: 1.4; }
+    .msg-bot { background: #EBF5FF; color: var(--text); align-self: flex-start; }
+    .msg-user { background: var(--primary); color: white; align-self: flex-end; }
+
+    .chat-options { padding: 10px; border-top: 1px solid var(--border); background: white; max-height: 160px; overflow-y: auto; }
+    .chat-options button {
+      display: block; width: 100%; text-align: left; background: #F0F4F8;
+      border: none; padding: 8px 10px; margin-bottom: 6px; border-radius: 6px;
+      font-size: 0.8rem; cursor: pointer; color: var(--text);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>👶 Pequeno Sol - Pediatria</h1>
+      <nav>
+        <button class="active" onclick="switchTab('agendamento', event)">Agendamentos</button>
+        <button onclick="switchTab('cadastro', event)">Novo Cadastro</button>
+        <button onclick="switchTab('prontuario', event)">Prontuário Pediátrico</button>
+      </nav>
+    </header>
+
+    <!-- ABA AGENDAMENTO -->
+    <div id="agendamento" class="tab-content active">
+      <div class="grid">
+        <div class="card">
+          <h2>Novo Agendamento</h2>
+          <form id="formAgendamento" onsubmit="agendarConsulta(event)">
+            <div class="form-group">
+              <label>Nome do Paciente</label>
+              <input type="text" id="nomePaciente" required placeholder="Ex: Arthur Silva">
+            </div>
+            <div class="form-group">
+              <label>Data de Nascimento</label>
+              <input type="date" id="dataNasc" required>
+            </div>
+            <div class="form-group">
+              <label>Responsável</label>
+              <input type="text" id="nomeResponsavel" required placeholder="Ex: Maria Silva (Mãe)">
+            </div>
+            <div class="form-group">
+              <label>Data da Consulta</label>
+              <input type="date" id="dataConsulta" required>
+            </div>
+            <div class="form-group">
+              <label>Horário</label>
+              <input type="time" id="horaConsulta" required>
+            </div>
+            <div class="form-group">
+              <label>Tipo de Atendimento</label>
+              <select id="tipoAtendimento">
+                <option value="Puericultura (Acompanhamento)">Puericultura (Acompanhamento)</option>
+                <option value="Consulta de Rotina">Consulta de Rotina</option>
+                <option value="Vacinação">Vacinação</option>
+                <option value="Urgência / Sintomas">Urgência / Sintomas</option>
+              </select>
+            </div>
+            <button type="submit" class="btn">Confirmar Agendamento</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2>Consultas Agendadas</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Paciente</th>
+                <th>Data/Hora</th>
+                <th>Responsável</th>
+                <th>Tipo</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaAgendamentos"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABA CADASTRO DE CONTATO -->
+    <div id="cadastro" class="tab-content">
+      <div class="grid-1-1">
+        <div class="card">
+          <h2>Cadastro para Futuros Contatos</h2>
+          <p style="font-size:0.85rem; color:#666; margin-bottom:15px;">Cadastre seu filho(a) para receber lembretes de vacinação, avisos de consultas de rotina e novidades da clínica.</p>
+          <form id="formCadastroContato" onsubmit="cadastrarContato(event)">
+            <div class="form-group">
+              <label>Nome Completo do Responsável</label>
+              <input type="text" id="cadNomeResp" required placeholder="Ex: Ana Souza">
+            </div>
+            <div class="form-group">
+              <label>E-mail de Contato</label>
+              <input type="email" id="cadEmail" required placeholder="exemplo@email.com">
+            </div>
+            <div class="form-group">
+              <label>WhatsApp / Telefone</label>
+              <input type="tel" id="cadTelefone" required placeholder="(11) 99999-9999">
+            </div>
+            <div class="form-group">
+              <label>Nome da Criança</label>
+              <input type="text" id="cadNomeCrianca" required placeholder="Ex: Gabriel Souza">
+            </div>
+            <div class="form-group">
+              <label>Data de Nascimento da Criança</label>
+              <input type="date" id="cadDataNascCrianca" required>
+            </div>
+            <div class="form-group">
+              <label>Deseja receber avisos sobre:</label>
+              <select id="cadPreferencia">
+                <option value="Lembretes de Vacinação">Lembretes de Vacinação</option>
+                <option value="Consultas de Puericultura">Consultas de Puericultura</option>
+                <option value="Dicas de Saúde Infantil">Dicas de Saúde Infantil</option>
+                <option value="Todos os assuntos">Todos os assuntos</option>
+              </select>
+            </div>
+            <button type="submit" class="btn" style="background:var(--secondary); color:#0C9D7B;">Efetuar Cadastro</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2>Nossos Pequenos Pacientes</h2>
+          <p style="font-size:0.85rem; color:#666;">Ambiente acolhedor e preparado especialmente para o bem-estar e o sorriso dos seus filhos.</p>
+          <div class="kids-gallery">
+            <img src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=500&auto=format&fit=crop&q=60" alt="Criança sorrindo">
+            <img src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=500&auto=format&fit=crop&q=60" alt="Bebê feliz">
+            <img src="https://images.unsplash.com/photo-1543332164-6e82f355badc?w=500&auto=format&fit=crop&q=60" alt="Criança brincando">
+            <img src="https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=500&auto=format&fit=crop&q=60" alt="Criança na consulta">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABA PRONTUÁRIO -->
+    <div id="prontuario" class="tab-content">
+      <div class="grid">
+        <div class="card">
+          <h2>Buscar Paciente</h2>
+          <div class="form-group">
+            <input type="text" id="buscaProntuario" placeholder="Digite o nome..." onkeyup="filtrarProntuarios()">
+          </div>
+          <div id="listaPacientes"></div>
+        </div>
+
+        <div class="card" id="detalhesProntuario">
+          <h2>Selecione um paciente para visualizar o prontuário</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RODAPÉ DA CLÍNICA -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-info">
+        <span>📍 <strong>Endereço:</strong> 
+          <a class="endereco-link" href="https://www.google.com/maps/search/?api=1&query=Rua+Augusta+1508+Sao+Paulo" target="_blank" rel="noopener noreferrer">
+            Rua Augusta, 1508 - São Paulo/SP
+          </a>
+        </span>
+        <span>📞 <strong>Telefone:</strong> (11) 3214-8800</span>
+      </div>
+      <div>
+        <span>🕒 <strong>Atendimento:</strong> Seg a Sex: 08h às 18h | Sáb: 08h às 12h</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- BOTÃO E MODAL DO CHATBOT -->
+  <button id="chatbot-btn" onclick="toggleChat()">💬 Dúvidas Pediátricas</button>
+
+  <div id="chatbot-modal">
+    <div class="chat-header">
+      <span>🤖 Assistente Pediátrico</span>
+      <button onclick="toggleChat()">&times;</button>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="msg msg-bot">
+        Olá! Sou o assistente virtual da clínica. Escolha uma das perguntas abaixo para tirar suas dúvidas sobre saúde infantil:
+      </div>
+    </div>
+    <div class="chat-options" id="chatOptions"></div>
+  </div>
+
+  <script>
+    const faqData = [
+      { q: "1. O que fazer em caso de febre?", a: "Mantenha a criança hidratada, use roupas leves e ofereça antitérmico prescrito se houver desconforto. Procure atendimento se passar de 38,5°C por mais de 48h ou em bebês < 3 meses." },
+      { q: "2. Com que frequência ir às consultas?", a: "Até 1 ano: mensais. De 1 a 2 anos: a cada 3 meses. Dos 2 aos 6 anos: a cada 6 meses. A partir dos 6 anos: anuais." },
+      { q: "3. Até quando o aleitamento deve ser exclusivo?", a: "Recomenda-se aleitamento materno exclusivo até os 6 meses de vida." },
+      { q: "4. Quando iniciar a introdução alimentar?", a: "A partir dos 6 meses, com sinais de prontidão (sentar com pouco apoio e interesse pelos alimentos)." },
+      { q: "5. Quais vacinas prioritárias no 1º ano?", a: "BCG, Hepatite B, Pentavalente, Rotavírus, Pneumocócica 10V, Menincogócica C e Tríplice Viral aos 12 meses." },
+      { q: "6. Como aliviar cólicas do bebê?", a: "Massagens suaves na barriga, movimento de bicicleta com as perninhas e compressas mornas no abdômen." },
+      { q: "7. Quanto tempo meu filho deve dormir?", a: "Recém-nascidos: 14-17h; Bebês (4-12m): 12-16h; Crianças (1-2a): 11-14h; Pré-escolares: 10-13h." },
+      { q: "8. Quando ir para a emergência?", a: "Em caso de falta de ar, lábios roxos, prostração intensa, recusa de líquidos ou convulsão." },
+      { q: "9. O que fazer em caso de engasgo?", a: "Até 1 ano: 5 tapas nas costas e 5 compressões no tórax. Crianças maiores: manobra de Heimlich e ligue 192." },
+      { q: "10. Como higienizar dentes e gengiva?", a: "Antes dos dentes: gaze úmida com água. Após primeiro dente: escova macia e pasta com flúor (1100 ppm)." }
+    ];
+
+    function switchTab(tabId, e) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      e.target.classList.add('active');
+    }
+
+    const agendamentos = [
+      { paciente: "Helena Santos", data: "2026-08-14", hora: "09:00", responsavel: "João Santos", tipo: "Puericultura (Acompanhamento)" },
+      { paciente: "Lucas Oliveira", data: "2026-08-14", hora: "10:30", responsavel: "Carla Oliveira", tipo: "Vacinação" }
+    ];
+
+    function renderAgendamentos() {
+      const tbody = document.getElementById('tabelaAgendamentos');
+      tbody.innerHTML = '';
+      agendamentos.forEach(item => {
+        tbody.innerHTML += `
+          <tr>
+            <td><strong>${item.paciente}</strong></td>
+            <td>${item.data} às ${item.hora}</td>
+            <td>${item.responsavel}</td>
+            <td><span class="badge">${item.tipo}</span></td>
+          </tr>
+        `;
+      });
+    }
+
+    function agendarConsulta(e) {
+      e.preventDefault();
+      agendamentos.push({
+        paciente: document.getElementById('nomePaciente').value,
+        data: document.getElementById('dataConsulta').value,
+        hora: document.getElementById('horaConsulta').value,
+        responsavel: document.getElementById('nomeResponsavel').value,
+        tipo: document.getElementById('tipoAtendimento').value
+      });
+      renderAgendamentos();
+      document.getElementById('formAgendamento').reset();
+      alert('Consulta agendada com sucesso!');
+    }
+
+    function cadastrarContato(e) {
+      e.preventDefault();
+      const nomeResp = document.getElementById('cadNomeResp').value;
+      const nomeCrianca = document.getElementById('cadNomeCrianca').value;
+      alert(`Cadastro efetuado com sucesso! Entraremos em contato com ${nomeResp} sobre os acompanhamentos de ${nomeCrianca}.`);
+      document.getElementById('formCadastroContato').reset();
+    }
+
+    const prontuarios = [
+      { id: 1, nome: "Helena Santos", idade: "6 meses", peso: "7.2 kg", estatura: "65 cm", alergias: "Nenhuma conhecida", vacinas: ["BCG", "Hepatite B", "Penta", "Rotavírus"], historico: "Desenvolvimento motor normal. Aleitamento exclusivo." },
+      { id: 2, nome: "Lucas Oliveira", idade: "2 anos", peso: "12.5 kg", estatura: "88 cm", alergias: "APLV", vacinas: ["Tetra Viral", "Pneumocócica 10V"], historico: "Criança ativa, dieta com restrição." }
+    ];
+
+    function renderListaPacientes() {
+      const div = document.getElementById('listaPacientes');
+      div.innerHTML = '';
+      prontuarios.forEach(p => {
+        div.innerHTML += `<div style="padding:10px; border-bottom:1px solid #eee; cursor:pointer;" onclick="verProntuario(${p.id})"><strong>${p.nome}</strong> (${p.idade})</div>`;
+      });
+    }
+
+    function verProntuario(id) {
+      const p = prontuarios.find(item => item.id === id);
+      document.getElementById('detalhesProntuario').innerHTML = `
+        <h2>Prontuário: ${p.nome}</h2>
+        <p><strong>Idade:</strong> ${p.idade} | <strong>Peso:</strong> ${p.peso} | <strong>Estatura:</strong> ${p.estatura}</p>
+        <p style="margin-top:8px;"><strong>Alergias:</strong> <span style="color:var(--accent); font-weight:bold;">${p.alergias}</span></p>
+        <h3 style="margin-top:12px; font-size:0.95rem;">Vacinas Aplicadas:</h3>
+        <ul class="vacinacao-list">${p.vacinas.map(v => `<li>✓ ${v}</li>`).join('')}</ul>
+        <h3 style="margin-top:12px; font-size:0.95rem;">Histórico:</h3>
+        <p style="background:#F8FAFC; padding:8px; border-radius:6px; font-size:0.85rem;">${p.historico}</p>
+      `;
+    }
+
+    /* Chatbot */
+    function toggleChat() {
+      const modal = document.getElementById('chatbot-modal');
+      modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function initChatOptions() {
+      const container = document.getElementById('chatOptions');
+      container.innerHTML = '';
+      faqData.forEach((item, index) => {
+        const btn = document.createElement('button');
+        btn.innerText = item.q;
+        btn.onclick = () => responderFAQ(index);
+        container.appendChild(btn);
+      });
+    }
+
+    function responderFAQ(index) {
+      const chatBody = document.getElementById('chatBody');
+      const item = faqData[index];
+
+      const msgUser = document.createElement('div');
+      msgUser.className = 'msg msg-user';
+      msgUser.innerText = item.q;
+      chatBody.appendChild(msgUser);
+
+      setTimeout(() => {
+        const msgBot = document.createElement('div');
+        msgBot.className = 'msg msg-bot';
+        msgBot.innerText = item.a;
+        chatBody.appendChild(msgBot);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }, 300);
+
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    renderAgendamentos();
+    renderListaPacientes();
+    initChatOptions();
+  </script>
+</body>
+</html>
