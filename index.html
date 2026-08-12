@@ -2,538 +2,636 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pequeno Sol - Clínica Pediátrica</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Sistema de Orientação Vocacional - Cursos Técnicos</title>
   <style>
     :root {
-      --primary: #4A90E2;
-      --secondary: #50E3C2;
-      --accent: #FF7E67;
-      --bg: #F4F8FA;
-      --card-bg: #FFFFFF;
-      --text: #2C3E50;
-      --border: #E1E8ED;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --border: #e2e8f0;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 20px; padding-bottom: 140px; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body { 
+      background-color: var(--bg); 
+      color: var(--text); 
+      padding: 12px; 
+      line-height: 1.5; 
+    }
+
+    .container { 
+      max-width: 800px; 
+      margin: 0 auto; 
+      background: var(--card-bg); 
+      padding: 20px; 
+      border-radius: 12px; 
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
+    }
     
-    header {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      padding: 20px;
-      border-radius: 12px;
+    h1 { font-size: 1.6rem; color: #0f172a; margin-bottom: 8px; }
+    h2 { font-size: 1.3rem; color: #0f172a; margin-bottom: 8px; }
+    h3 { font-size: 1.1rem; color: #0f172a; margin-bottom: 12px; }
+    .subtitle { color: #64748b; font-size: 0.95rem; margin-bottom: 20px; }
+
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; }
+    
+    input[type="text"], input[type="email"], input[type="password"], select {
+      width: 100%; 
+      padding: 12px 14px; 
+      border: 1px solid var(--border); 
+      border-radius: 8px; 
+      font-size: 16px; /* Evita zoom automático no iOS */
+      background-color: #fff;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    select {
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%3a64748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px;
+      padding-right: 40px;
+    }
+
+    .btn-group {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    button {
+      width: 100%;
+      background-color: var(--primary); 
+      color: white; 
+      border: none; 
+      padding: 14px 20px;
+      border-radius: 8px; 
+      font-size: 16px; 
+      font-weight: 600; 
+      cursor: pointer; 
+      transition: background 0.2s;
+      display: inline-flex;
+      justify-content: center;
       align-items: center;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-      flex-wrap: wrap;
-      gap: 15px;
     }
 
-    nav { display: flex; gap: 8px; flex-wrap: wrap; }
+    button:hover { background-color: var(--primary-hover); }
+    button.btn-secondary { background-color: #64748b; }
+    button.btn-success { background-color: #16a34a; }
+    button.btn-danger { background-color: #dc2626; }
 
-    nav button {
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid white;
-      color: white;
-      padding: 10px 18px;
-      border-radius: 20px;
+    .question { margin-bottom: 20px; }
+    
+    /* Lista de Opções para Celular */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .option-card {
+      background: #ffffff;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
       cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .option-card:active, .option-card:hover {
+      border-color: #93c5fd;
+      background-color: #f8fafc;
+    }
+
+    .option-card.selected {
+      border-color: var(--primary);
+      background-color: #eff6ff;
+      color: var(--primary-hover);
       font-weight: 600;
-      transition: all 0.3s ease;
     }
 
-    nav button.active, nav button:hover {
-      background: white;
-      color: var(--primary);
-    }
+    .progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
 
-    .container { max-width: 1100px; margin: 0 auto; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
-    .grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
-    .grid-1-1 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    @media (max-width: 768px) { 
-      .grid, .grid-1-1 { grid-template-columns: 1fr; } 
-    }
-
-    .card {
-      background: var(--card-bg);
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    /* Cards do Resultado */
+    .result-card {
+      background-color: #ffffff;
       border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
 
-    .card h2 { color: var(--primary); margin-bottom: 15px; font-size: 1.2rem; }
-
-    .form-group { margin-bottom: 12px; }
-    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
-    .form-group input, .form-group select, .form-group textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      outline: none;
-    }
-
-    .btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      width: 100%;
-    }
-    .btn:hover { background: #357ABD; }
-
-    /* GALERIA DE IMAGENS */
-    .kids-gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-top: 15px;
-    }
-
-    .kids-gallery img {
+    .result-card img {
       width: 100%;
       height: 160px;
       object-fit: cover;
-      border-radius: 12px;
-      border: 3px solid white;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-      transition: transform 0.3s ease;
     }
 
-    .kids-gallery img:hover {
-      transform: scale(1.03);
-    }
+    .result-card-content { padding: 16px; }
 
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
-    th { color: var(--primary); }
-
-    .badge {
-      background: #EBF5FF;
-      color: var(--primary);
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 0.75rem;
+    .result-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
       font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 8px;
     }
 
-    .vacinacao-list { list-style: none; display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
-    .vacinacao-list li { background: #E6F9F5; color: #0C9D7B; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; }
+    .result-badge.primary { background-color: #dcfce7; color: #166534; }
+    .result-badge.secondary { background-color: #dbeafe; color: #1e40af; }
 
-    /* RODAPÉ */
-    footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
+    .result-title { font-size: 1.2rem; font-weight: bold; color: #0f172a; margin-bottom: 6px; }
+
+    .hidden { display: none; }
+    .admin-link { margin-top: 25px; text-align: center; font-size: 14px; }
+    .admin-link a { color: #64748b; text-decoration: underline; cursor: pointer; }
+
+    /* Tabela Responsiva */
+    .table-responsive {
       width: 100%;
-      background: var(--text);
-      color: white;
-      padding: 15px 20px;
-      font-size: 0.85rem;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-      z-index: 900;
-    }
-
-    .footer-content {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .endereco-link {
-      color: var(--secondary);
-      text-decoration: underline;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .endereco-link:hover { color: white; }
-
-    /* CHATBOT */
-    #chatbot-btn {
-      position: fixed;
-      bottom: 75px;
-      right: 20px;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 50px;
-      padding: 12px 20px;
-      font-weight: bold;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      z-index: 1000;
-    }
-
-    #chatbot-modal {
-      position: fixed;
-      bottom: 130px;
-      right: 20px;
-      width: 360px;
-      max-width: 90vw;
-      height: 460px;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-      display: none;
-      flex-direction: column;
-      z-index: 1000;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-top: 15px;
+      border-radius: 8px;
       border: 1px solid var(--border);
-      overflow: hidden;
     }
 
-    .chat-header {
-      background: var(--primary);
-      color: white;
-      padding: 14px 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: bold;
-    }
+    table { width: 100%; border-collapse: collapse; min-width: 600px; }
+    th, td { border: 1px solid var(--border); padding: 10px; text-align: left; font-size: 13px; }
+    th { background-color: #f1f5f9; font-weight: 600; }
 
-    .chat-header button { background: transparent; border: none; color: white; font-size: 1.2rem; cursor: pointer; }
-
-    .chat-body {
-      flex: 1;
-      padding: 12px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      background: #FAFBFD;
-    }
-
-    .msg { max-width: 85%; padding: 10px 12px; border-radius: 12px; font-size: 0.85rem; line-height: 1.4; }
-    .msg-bot { background: #EBF5FF; color: var(--text); align-self: flex-start; }
-    .msg-user { background: var(--primary); color: white; align-self: flex-end; }
-
-    .chat-options { padding: 10px; border-top: 1px solid var(--border); background: white; max-height: 160px; overflow-y: auto; }
-    .chat-options button {
-      display: block; width: 100%; text-align: left; background: #F0F4F8;
-      border: none; padding: 8px 10px; margin-bottom: 6px; border-radius: 6px;
-      font-size: 0.8rem; cursor: pointer; color: var(--text);
+    /* Ajustes específicos para telas acima de 600px */
+    @media (min-width: 600px) {
+      body { padding: 30px 20px; }
+      .container { padding: 30px; }
+      .btn-group { flex-direction: row; }
+      .btn-group button { width: auto; }
+      .result-card img { height: 200px; }
+      h1 { font-size: 1.8rem; }
+      h2 { font-size: 1.5rem; }
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <header>
-      <h1>👶 Pequeno Sol - Pediatria</h1>
-      <nav>
-        <button class="active" onclick="switchTab('agendamento', event)">Agendamentos</button>
-        <button onclick="switchTab('cadastro', event)">Novo Cadastro</button>
-        <button onclick="switchTab('prontuario', event)">Prontuário Pediátrico</button>
-      </nav>
-    </header>
-
-    <!-- ABA AGENDAMENTO -->
-    <div id="agendamento" class="tab-content active">
-      <div class="grid">
-        <div class="card">
-          <h2>Novo Agendamento</h2>
-          <form id="formAgendamento" onsubmit="agendarConsulta(event)">
-            <div class="form-group">
-              <label>Nome do Paciente</label>
-              <input type="text" id="nomePaciente" required placeholder="Ex: Arthur Silva">
-            </div>
-            <div class="form-group">
-              <label>Data de Nascimento</label>
-              <input type="date" id="dataNasc" required>
-            </div>
-            <div class="form-group">
-              <label>Responsável</label>
-              <input type="text" id="nomeResponsavel" required placeholder="Ex: Maria Silva (Mãe)">
-            </div>
-            <div class="form-group">
-              <label>Data da Consulta</label>
-              <input type="date" id="dataConsulta" required>
-            </div>
-            <div class="form-group">
-              <label>Horário</label>
-              <input type="time" id="horaConsulta" required>
-            </div>
-            <div class="form-group">
-              <label>Tipo de Atendimento</label>
-              <select id="tipoAtendimento">
-                <option value="Puericultura (Acompanhamento)">Puericultura (Acompanhamento)</option>
-                <option value="Consulta de Rotina">Consulta de Rotina</option>
-                <option value="Vacinação">Vacinação</option>
-                <option value="Urgência / Sintomas">Urgência / Sintomas</option>
-              </select>
-            </div>
-            <button type="submit" class="btn">Confirmar Agendamento</button>
-          </form>
-        </div>
-
-        <div class="card">
-          <h2>Consultas Agendadas</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Paciente</th>
-                <th>Data/Hora</th>
-                <th>Responsável</th>
-                <th>Tipo</th>
-              </tr>
-            </thead>
-            <tbody id="tabelaAgendamentos"></tbody>
-          </table>
-        </div>
+<div class="container">
+  
+  <!-- ETAPA 1: DADOS DO ALUNO -->
+  <div id="step-student-info">
+    <h1>Orientação Vocacional</h1>
+    <p class="subtitle">Preencha seus dados para iniciar o teste de afinidade para os cursos técnicos.</p>
+    
+    <form id="student-form">
+      <div class="form-group">
+        <label for="fullName">Nome Completo *</label>
+        <input type="text" id="fullName" required placeholder="Ex: João Silva Sauro">
       </div>
-    </div>
-
-    <!-- ABA CADASTRO DE CONTATO -->
-    <div id="cadastro" class="tab-content">
-      <div class="grid-1-1">
-        <div class="card">
-          <h2>Cadastro para Futuros Contatos</h2>
-          <p style="font-size:0.85rem; color:#666; margin-bottom:15px;">Cadastre seu filho(a) para receber lembretes de vacinação, avisos de consultas de rotina e novidades da clínica.</p>
-          <form id="formCadastroContato" onsubmit="cadastrarContato(event)">
-            <div class="form-group">
-              <label>Nome Completo do Responsável</label>
-              <input type="text" id="cadNomeResp" required placeholder="Ex: Ana Souza">
-            </div>
-            <div class="form-group">
-              <label>E-mail de Contato</label>
-              <input type="email" id="cadEmail" required placeholder="exemplo@email.com">
-            </div>
-            <div class="form-group">
-              <label>WhatsApp / Telefone</label>
-              <input type="tel" id="cadTelefone" required placeholder="(11) 99999-9999">
-            </div>
-            <div class="form-group">
-              <label>Nome da Criança</label>
-              <input type="text" id="cadNomeCrianca" required placeholder="Ex: Gabriel Souza">
-            </div>
-            <div class="form-group">
-              <label>Data de Nascimento da Criança</label>
-              <input type="date" id="cadDataNascCrianca" required>
-            </div>
-            <div class="form-group">
-              <label>Deseja receber avisos sobre:</label>
-              <select id="cadPreferencia">
-                <option value="Lembretes de Vacinação">Lembretes de Vacinação</option>
-                <option value="Consultas de Puericultura">Consultas de Puericultura</option>
-                <option value="Dicas de Saúde Infantil">Dicas de Saúde Infantil</option>
-                <option value="Todos os assuntos">Todos os assuntos</option>
-              </select>
-            </div>
-            <button type="submit" class="btn" style="background:var(--secondary); color:#0C9D7B;">Efetuar Cadastro</button>
-          </form>
-        </div>
-
-        <div class="card">
-          <h2>Nossos Pequenos Pacientes</h2>
-          <p style="font-size:0.85rem; color:#666;">Ambiente acolhedor e preparado especialmente para o bem-estar e o sorriso dos seus filhos.</p>
-          <div class="kids-gallery">
-            <img src="https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?w=500&auto=format&fit=crop&q=60" alt="Criança sorrindo">
-            <img src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=500&auto=format&fit=crop&q=60" alt="Bebê feliz">
-            <img src="https://images.unsplash.com/photo-1543332164-6e82f355badc?w=500&auto=format&fit=crop&q=60" alt="Criança brincando">
-            <img src="https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=500&auto=format&fit=crop&q=60" alt="Criança na consulta">
-          </div>
-        </div>
+      <div class="form-group">
+        <label for="classGroup">Turma *</label>
+        <select id="classGroup" required>
+          <option value="" disabled selected>Selecione sua turma</option>
+          <option value="1º A">1º A</option>
+          <option value="1º B">1º B</option>
+          <option value="1º C">1º C</option>
+          <option value="1º D">1º D</option>
+          <option value="1º E">1º E</option>
+          <option value="1º F">1º F</option>
+          <option value="1º G">1º G</option>
+          <option value="1º H">1º H</option>
+          <option value="1º I">1º I</option>
+        </select>
       </div>
-    </div>
-
-    <!-- ABA PRONTUÁRIO -->
-    <div id="prontuario" class="tab-content">
-      <div class="grid">
-        <div class="card">
-          <h2>Buscar Paciente</h2>
-          <div class="form-group">
-            <input type="text" id="buscaProntuario" placeholder="Digite o nome..." onkeyup="filtrarProntuarios()">
-          </div>
-          <div id="listaPacientes"></div>
-        </div>
-
-        <div class="card" id="detalhesProntuario">
-          <h2>Selecione um paciente para visualizar o prontuário</h2>
-        </div>
+      <div class="form-group">
+        <label for="email">E-mail Pessoal *</label>
+        <input type="email" id="email" required placeholder="Ex: joao@email.com">
       </div>
+      <div class="form-group">
+        <label for="ra">RA Completo *</label>
+        <input type="text" id="ra" required placeholder="Ex: 000123456789-0/SP">
+      </div>
+      <button type="submit">Iniciar Questionário</button>
+    </form>
+    
+    <div class="admin-link">
+      <a onclick="showAdminLogin()">Acesso Restrito - Administrador</a>
     </div>
   </div>
 
-  <!-- RODAPÉ DA CLÍNICA -->
-  <footer>
-    <div class="footer-content">
-      <div class="footer-info">
-        <span>📍 <strong>Endereço:</strong> 
-          <a class="endereco-link" href="https://www.google.com/maps/search/?api=1&query=Rua+Augusta+1508+Sao+Paulo" target="_blank" rel="noopener noreferrer">
-            Rua Augusta, 1508 - São Paulo/SP
-          </a>
-        </span>
-        <span>📞 <strong>Telefone:</strong> (11) 3214-8800</span>
-      </div>
-      <div>
-        <span>🕒 <strong>Atendimento:</strong> Seg a Sex: 08h às 18h | Sáb: 08h às 12h</span>
-      </div>
-    </div>
-  </footer>
-
-  <!-- BOTÃO E MODAL DO CHATBOT -->
-  <button id="chatbot-btn" onclick="toggleChat()">💬 Dúvidas Pediátricas</button>
-
-  <div id="chatbot-modal">
-    <div class="chat-header">
-      <span>🤖 Assistente Pediátrico</span>
-      <button onclick="toggleChat()">&times;</button>
-    </div>
-    <div class="chat-body" id="chatBody">
-      <div class="msg msg-bot">
-        Olá! Sou o assistente virtual da clínica. Escolha uma das perguntas abaixo para tirar suas dúvidas sobre saúde infantil:
-      </div>
-    </div>
-    <div class="chat-options" id="chatOptions"></div>
+  <!-- ETAPA 2: QUESTIONÁRIO DE 10 PERGUNTAS (TEXTO PURO) -->
+  <div id="step-quiz" class="hidden">
+    <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+    <h2>Questionário de Afinidade</h2>
+    <p class="subtitle">Escolha a opção que melhor descreve seu perfil em cada situação.</p>
+    <div id="quiz-container"></div>
+    <button id="btn-next" onclick="nextQuestion()" style="margin-top: 15px;">Próxima Pergunta</button>
   </div>
 
-  <script>
-    const faqData = [
-      { q: "1. O que fazer em caso de febre?", a: "Mantenha a criança hidratada, use roupas leves e ofereça antitérmico prescrito se houver desconforto. Procure atendimento se passar de 38,5°C por mais de 48h ou em bebês < 3 meses." },
-      { q: "2. Com que frequência ir às consultas?", a: "Até 1 ano: mensais. De 1 a 2 anos: a cada 3 meses. Dos 2 aos 6 anos: a cada 6 meses. A partir dos 6 anos: anuais." },
-      { q: "3. Até quando o aleitamento deve ser exclusivo?", a: "Recomenda-se aleitamento materno exclusivo até os 6 meses de vida." },
-      { q: "4. Quando iniciar a introdução alimentar?", a: "A partir dos 6 meses, com sinais de prontidão (sentar com pouco apoio e interesse pelos alimentos)." },
-      { q: "5. Quais vacinas prioritárias no 1º ano?", a: "BCG, Hepatite B, Pentavalente, Rotavírus, Pneumocócica 10V, Menincogócica C e Tríplice Viral aos 12 meses." },
-      { q: "6. Como aliviar cólicas do bebê?", a: "Massagens suaves na barriga, movimento de bicicleta com as perninhas e compressas mornas no abdômen." },
-      { q: "7. Quanto tempo meu filho deve dormir?", a: "Recém-nascidos: 14-17h; Bebês (4-12m): 12-16h; Crianças (1-2a): 11-14h; Pré-escolares: 10-13h." },
-      { q: "8. Quando ir para a emergência?", a: "Em caso de falta de ar, lábios roxos, prostração intensa, recusa de líquidos ou convulsão." },
-      { q: "9. O que fazer em caso de engasgo?", a: "Até 1 ano: 5 tapas nas costas e 5 compressões no tórax. Crianças maiores: manobra de Heimlich e ligue 192." },
-      { q: "10. Como higienizar dentes e gengiva?", a: "Antes dos dentes: gaze úmida com água. Após primeiro dente: escova macia e pasta com flúor (1100 ppm)." }
-    ];
+  <!-- ETAPA 3: EXIBIÇÃO DO RESULTADO (COM IMAGENS) -->
+  <div id="step-result" class="hidden">
+    <h2>Seu Resultado</h2>
+    <p class="subtitle">Com base nas suas respostas, identificamos a seguinte afinidade profissional:</p>
 
-    function switchTab(tabId, e) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
-      document.getElementById(tabId).classList.add('active');
-      e.target.classList.add('active');
-    }
+    <!-- Recomendação Principal -->
+    <div class="result-card">
+      <img id="res-primary-img" src="" alt="Imagem do curso principal">
+      <div class="result-card-content">
+        <span class="result-badge primary">1ª Opção Recomendada</span>
+        <div class="result-title" id="res-primary-name"></div>
+        <p id="res-primary-desc" style="font-size: 0.9rem; color: #475569;"></p>
+      </div>
+    </div>
 
-    const agendamentos = [
-      { paciente: "Helena Santos", data: "2026-08-14", hora: "09:00", responsavel: "João Santos", tipo: "Puericultura (Acompanhamento)" },
-      { paciente: "Lucas Oliveira", data: "2026-08-14", hora: "10:30", responsavel: "Carla Oliveira", tipo: "Vacinação" }
-    ];
+    <!-- Segunda Opção -->
+    <div class="result-card">
+      <img id="res-secondary-img" src="" alt="Imagem do segundo curso">
+      <div class="result-card-content">
+        <span class="result-badge secondary">2ª Opção Recomendada</span>
+        <div class="result-title" id="res-secondary-name"></div>
+        <p id="res-secondary-desc" style="font-size: 0.9rem; color: #475569;"></p>
+      </div>
+    </div>
 
-    function renderAgendamentos() {
-      const tbody = document.getElementById('tabelaAgendamentos');
-      tbody.innerHTML = '';
-      agendamentos.forEach(item => {
-        tbody.innerHTML += `
+    <p style="margin-top: 15px; font-size: 0.85rem; color: #64748b; text-align: center;">
+      * Seus dados e seu resultado foram registrados com sucesso no sistema.
+    </p>
+
+    <div style="margin-top: 20px;">
+      <button onclick="location.reload()" class="btn-secondary">Finalizar / Voltar ao Início</button>
+    </div>
+  </div>
+
+  <!-- PAINEL DO ADMINISTRADOR -->
+  <div id="step-admin-login" class="hidden">
+    <h2>Área Administrativa</h2>
+    <p class="subtitle">Digite a senha do administrador para visualizar os relatórios.</p>
+    <div class="form-group">
+      <label for="adminPass">Senha de Acesso</label>
+      <input type="password" id="adminPass" placeholder="Senha padrão: admin123">
+    </div>
+    <div class="btn-group">
+      <button onclick="loginAdmin()">Entrar</button>
+      <button onclick="location.reload()" class="btn-secondary">Voltar</button>
+    </div>
+  </div>
+
+  <div id="step-admin-dashboard" class="hidden">
+    <h2>Relatório de Escolhas</h2>
+    <p class="subtitle">Alunos cadastrados e seus respectivos resultados.</p>
+    
+    <div class="btn-group">
+      <button onclick="exportCSV()" class="btn-success">Exportar CSV</button>
+      <button onclick="clearData()" class="btn-danger">Limpar Registros</button>
+    </div>
+    
+    <div class="table-responsive">
+      <table id="results-table">
+        <thead>
           <tr>
-            <td><strong>${item.paciente}</strong></td>
-            <td>${item.data} às ${item.hora}</td>
-            <td>${item.responsavel}</td>
-            <td><span class="badge">${item.tipo}</span></td>
+            <th>Data/Hora</th>
+            <th>Nome</th>
+            <th>Turma</th>
+            <th>E-mail</th>
+            <th>RA</th>
+            <th>1ª Opção</th>
+            <th>2ª Opção</th>
           </tr>
-        `;
-      });
+        </thead>
+        <tbody id="results-body">
+          <!-- Dados via JS -->
+        </tbody>
+      </table>
+    </div>
+    
+    <div style="margin-top: 20px;">
+      <button onclick="location.reload()" class="btn-secondary">Sair do Painel</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // DETALHES DOS CURSOS COM IMAGENS EXCLUSIVAS PARA A TELA DE RESULTADOS
+  const courseDetails = {
+    DS: {
+      name: "Desenvolvimento de Sistemas",
+      desc: "Sua maior afinidade está na resolução de problemas lógicos, criação de softwares, algoritmos, automação digital e tecnologia.",
+      image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80"
+    },
+    FAR: {
+      name: "Farmácia",
+      desc: "Seu perfil demonstra grande interesse pelo rigor científico, biossegurança, manipulação de compostos químicos e controle de qualidade de medicamentos.",
+      image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=800&q=80"
+    },
+    ELE: {
+      name: "Eletrônica",
+      desc: "Você demonstra forte inclinação prática para circuitos, hardware, automação, microcontroladores e manutenção técnica.",
+      image: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&w=800&q=80"
+    },
+    ENF: {
+      name: "Enfermagem",
+      desc: "Seu perfil valoriza o cuidado humano, biossegurança, primeiros socorros e a rotina assistencial em saúde.",
+      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80"
+    },
+    ADM: {
+      name: "Administração",
+      desc: "Sua afinidade é voltada para a gestão de rotinas, organização de processos, planilhas e visão corporativa.",
+      image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80"
+    },
+    VEN: {
+      name: "Vendas",
+      desc: "Você apresenta características de comunicação, persuasão, técnicas comerciais e alcance de metas de mercado.",
+      image: "https://images.unsplash.com/photo-1556742049-0a674d812328?auto=format&fit=crop&w=800&q=80"
     }
+  };
 
-    function agendarConsulta(e) {
-      e.preventDefault();
-      agendamentos.push({
-        paciente: document.getElementById('nomePaciente').value,
-        data: document.getElementById('dataConsulta').value,
-        hora: document.getElementById('horaConsulta').value,
-        responsavel: document.getElementById('nomeResponsavel').value,
-        tipo: document.getElementById('tipoAtendimento').value
-      });
-      renderAgendamentos();
-      document.getElementById('formAgendamento').reset();
-      alert('Consulta agendada com sucesso!');
+  // PERGUNTAS (SEM IMAGENS NAS OPÇÕES)
+  const questions = [
+    {
+      title: "1. Ao se deparar com um problema novo, qual abordagem você prefere?",
+      options: [
+        { text: "Entender a lógica por trás do problema e desenvolver uma solução computacional/digital.", course: "DS" },
+        { text: "Analisar as propriedades químicas, biológicas e a precisão do problema.", course: "FAR" },
+        { text: "Verificar o funcionamento físico de equipamentos, cabos ou circuitos elétricos.", course: "ELE" },
+        { text: "Ajudar e dar suporte imediato às pessoas envolvidas.", course: "ENF" }
+      ]
+    },
+    {
+      title: "2. Qual atividade em um laboratório te deixaria mais motivado?",
+      options: [
+        { text: "Analisar substâncias químicas, dosagens e a composição de fármacos.", course: "FAR" },
+        { text: "Desenvolver algoritmos e programas de computador em um ambiente de código.", course: "DS" },
+        { text: "Fazer montagem de placas eletrônicas, soldagem e testes com multímetro.", course: "ELE" },
+        { text: "Praticar simulações de cuidados de saúde, curativos e primeiros socorros.", course: "ENF" }
+      ]
+    },
+    {
+      title: "3. Qual destas áreas de conhecimento você acha mais instigante?",
+      options: [
+        { text: "Linguagens de programação, bancos de dados e inteligência artificial.", course: "DS" },
+        { text: "Farmacologia, química orgânica, biofísica e controle de qualidade.", course: "FAR" },
+        { text: "Sistemas embarcados, automação de circuitos e microcontroladores.", course: "ELE" },
+        { text: "Anatomia humana, biossegurança e assistência hospitalar.", course: "ENF" },
+        { text: "Organização de planilhas e rotinas de escritório.", course: "ADM" }
+      ]
+    },
+    {
+      title: "4. Como você prefere realizar suas tarefas principais?",
+      options: [
+        { text: "Concentrado em frente ao computador resolvendo desafios de raciocínio lógico.", course: "DS" },
+        { text: "Seguindo rígidas normas de biossegurança e medições precisas em laboratório.", course: "FAR" },
+        { text: "Manipulando ferramentas, peças físicas e instrumentos de bancada.", course: "ELE" },
+        { text: "Lidando diretamente com pessoas e zelando pela saúde delas.", course: "ENF" }
+      ]
+    },
+    {
+      title: "5. Se você fosse apresentar um projeto de feira de ciências, sobre o que seria?",
+      options: [
+        { text: "Pesquisa em biotecnologia sobre o uso de princípios ativos na manipulação de remédios.", course: "FAR" },
+        { text: "Um aplicativo ou sistema web interativo criado por você para resolver uma demanda da escola.", course: "DS" },
+        { text: "Um dispositivo automatizado com sensores e microcontroladores.", course: "ELE" },
+        { text: "Uma maquete e demonstração prática sobre primeiros socorros e prevenção de doenças.", course: "ENF" }
+      ]
+    },
+    {
+      title: "6. Qual tipo de conteúdo técnico você gosta de pesquisar por curiosidade?",
+      options: [
+        { text: "Tutoriais sobre linguagens de programação, desenvolvimento web e tecnologia.", course: "DS" },
+        { text: "Notícias e artigos sobre a indústria farmacêutica e descobertas em medicamentos.", course: "FAR" },
+        { text: "Vídeos sobre manutenção de aparelhos, diagramas elétricos e placas.", course: "ELE" },
+        { text: "Vídeos e conteúdos sobre procedimentos cirúrgicos e saúde pública.", course: "ENF" },
+        { text: "Dicas de técnicas de vendas e estratégias de negociação.", course: "VEN" }
+      ]
+    },
+    {
+      title: "7. O que traria mais sentimento de dever cumprido ao final de um dia de trabalho?",
+      options: [
+        { text: "Construir um código limpo, sem erros e ver um sistema funcionando perfeitamente.", course: "DS" },
+        { text: "Garantir a precisão absoluta e a segurança na preparação de fórmulas de medicamentos.", course: "FAR" },
+        { text: "Diagnosticar um defeito elétrico complexo e reparar o equipamento.", course: "ELE" },
+        { text: "Saber que prestou um atendimento humanizado e fez a diferença na vida de um paciente.", course: "ENF" }
+      ]
+    },
+    {
+      title: "8. Durante um trabalho prático em grupo, qual papel você assume naturally?",
+      options: [
+        { text: "O responsável pela parte lógica, digital ou automação do projeto.", course: "DS" },
+        { text: "O responsável pelo rigor dos dados científicos, fórmulas e conformidade com as regras.", course: "FAR" },
+        { text: "O responsável pela montagem prática e manuseio de equipamentos.", course: "ELE" },
+        { text: "O que cuida do acolhimento e bem-estar de todos os participantes.", course: "ENF" }
+      ]
+    },
+    {
+      title: "9. Qual ambiente de trabalho te atrai mais?",
+      options: [
+        { text: "Empresas de tecnologia, salas de desenvolvimento de software ou trabalho home-office.", course: "DS" },
+        { text: "Laboratórios de manipulação, indústria de cosméticos ou farmácias de grande porte.", course: "FAR" },
+        { text: "Bancadas de manutenção, indústrias técnicas ou laboratórios de automação.", course: "ELE" },
+        { text: "Hospitais, postos de saúde, clínicas médicas ou prontos-socorros.", course: "ENF" }
+      ]
+    },
+    {
+      title: "10. Em uma situação emergencial que exige ação imediata, o que você faria?",
+      options: [
+        { text: "Investigar falhas lógicas e reescrever parâmetros no computador para restaurar um sistema.", course: "DS" },
+        { text: "Calcular com exatidão a dosagem ou substância neutra para estancar um problema biológico.", course: "FAR" },
+        { text: "Isolar um painel de energia e reparar componentes para evitar um apagão.", course: "ELE" },
+        { text: "Aplicar manobras de primeiros socorros para estabilizar a saúde de alguém.", course: "ENF" }
+      ]
     }
+  ];
 
-    function cadastrarContato(e) {
-      e.preventDefault();
-      const nomeResp = document.getElementById('cadNomeResp').value;
-      const nomeCrianca = document.getElementById('cadNomeCrianca').value;
-      alert(`Cadastro efetuado com sucesso! Entraremos em contato com ${nomeResp} sobre os acompanhamentos de ${nomeCrianca}.`);
-      document.getElementById('formCadastroContato').reset();
-    }
+  let studentData = {};
+  let currentQuestion = 0;
+  let selectedOption = null;
+  
+  let scores = { DS: 0, FAR: 0, ELE: 0, ENF: 0, ADM: 0, VEN: 0 };
 
-    const prontuarios = [
-      { id: 1, nome: "Helena Santos", idade: "6 meses", peso: "7.2 kg", estatura: "65 cm", alergias: "Nenhuma conhecida", vacinas: ["BCG", "Hepatite B", "Penta", "Rotavírus"], historico: "Desenvolvimento motor normal. Aleitamento exclusivo." },
-      { id: 2, nome: "Lucas Oliveira", idade: "2 anos", peso: "12.5 kg", estatura: "88 cm", alergias: "APLV", vacinas: ["Tetra Viral", "Pneumocócica 10V"], historico: "Criança ativa, dieta com restrição." }
-    ];
+  // ETAPA 1: VALIDAR FORMULÁRIO
+  document.getElementById('student-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    studentData = {
+      name: document.getElementById('fullName').value,
+      classGroup: document.getElementById('classGroup').value,
+      email: document.getElementById('email').value,
+      ra: document.getElementById('ra').value,
+      date: new Date().toLocaleString('pt-BR')
+    };
 
-    function renderListaPacientes() {
-      const div = document.getElementById('listaPacientes');
-      div.innerHTML = '';
-      prontuarios.forEach(p => {
-        div.innerHTML += `<div style="padding:10px; border-bottom:1px solid #eee; cursor:pointer;" onclick="verProntuario(${p.id})"><strong>${p.nome}</strong> (${p.idade})</div>`;
-      });
-    }
+    document.getElementById('step-student-info').classList.add('hidden');
+    document.getElementById('step-quiz').classList.remove('hidden');
+    renderQuestion();
+  });
 
-    function verProntuario(id) {
-      const p = prontuarios.find(item => item.id === id);
-      document.getElementById('detalhesProntuario').innerHTML = `
-        <h2>Prontuário: ${p.nome}</h2>
-        <p><strong>Idade:</strong> ${p.idade} | <strong>Peso:</strong> ${p.peso} | <strong>Estatura:</strong> ${p.estatura}</p>
-        <p style="margin-top:8px;"><strong>Alergias:</strong> <span style="color:var(--accent); font-weight:bold;">${p.alergias}</span></p>
-        <h3 style="margin-top:12px; font-size:0.95rem;">Vacinas Aplicadas:</h3>
-        <ul class="vacinacao-list">${p.vacinas.map(v => `<li>✓ ${v}</li>`).join('')}</ul>
-        <h3 style="margin-top:12px; font-size:0.95rem;">Histórico:</h3>
-        <p style="background:#F8FAFC; padding:8px; border-radius:6px; font-size:0.85rem;">${p.historico}</p>
+  // RENDERIZAR PERGUNTA (EM TEXTO PURO)
+  function renderQuestion() {
+    const q = questions[currentQuestion];
+    
+    // Atualizar barra de progresso
+    const progressPercent = ((currentQuestion) / questions.length) * 100;
+    document.getElementById('progress-fill').style.width = `${progressPercent}%`;
+
+    let html = `<div class="question"><h3>${q.title}</h3><div class="options-list">`;
+    q.options.forEach((opt) => {
+      html += `
+        <div class="option-card" onclick="selectOption(this, '${opt.course}')">
+          ${opt.text}
+        </div>
       `;
+    });
+    html += `</div></div>`;
+    document.getElementById('quiz-container').innerHTML = html;
+    selectedOption = null;
+    window.scrollTo(0, 0);
+  }
+
+  function selectOption(card, course) {
+    document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedOption = course;
+  }
+
+  // NAVEGAÇÃO E PONTUAÇÃO
+  function nextQuestion() {
+    if (!selectedOption) {
+      alert("Por favor, selecione uma resposta antes de continuar.");
+      return;
     }
 
-    /* Chatbot */
-    function toggleChat() {
-      const modal = document.getElementById('chatbot-modal');
-      modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+    scores[selectedOption]++;
+
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+      renderQuestion();
+    } else {
+      finishQuiz();
+    }
+  }
+
+  // FINALIZAR E EXIBIR RESULTADOS COM IMAGENS
+  function finishQuiz() {
+    const priorityOrder = ['FAR', 'DS', 'ELE', 'ENF', 'ADM', 'VEN'];
+
+    const sorted = Object.keys(scores).sort((a, b) => {
+      if (scores[b] !== scores[a]) {
+        return scores[b] - scores[a];
+      }
+      return priorityOrder.indexOf(a) - priorityOrder.indexOf(b);
+    });
+
+    const primaryKey = sorted[0];
+    const secondaryKey = sorted[1];
+
+    studentData.resultPrimary = courseDetails[primaryKey].name;
+    studentData.resultSecondary = courseDetails[secondaryKey].name;
+
+    // Salvar no localStorage
+    let records = JSON.parse(localStorage.getItem('vocational_results') || '[]');
+    records.push(studentData);
+    localStorage.setItem('vocational_results', JSON.stringify(records));
+
+    // Exibir telas de resultado
+    document.getElementById('res-primary-img').src = courseDetails[primaryKey].image;
+    document.getElementById('res-primary-name').innerText = courseDetails[primaryKey].name;
+    document.getElementById('res-primary-desc').innerText = courseDetails[primaryKey].desc;
+
+    document.getElementById('res-secondary-img').src = courseDetails[secondaryKey].image;
+    document.getElementById('res-secondary-name').innerText = courseDetails[secondaryKey].name;
+    document.getElementById('res-secondary-desc').innerText = courseDetails[secondaryKey].desc;
+
+    document.getElementById('step-quiz').classList.add('hidden');
+    document.getElementById('step-result').classList.remove('hidden');
+    window.scrollTo(0, 0);
+  }
+
+  // PAINEL ADMINISTRATIVO
+  function showAdminLogin() {
+    document.getElementById('step-student-info').classList.add('hidden');
+    document.getElementById('step-admin-login').classList.remove('hidden');
+  }
+
+  function loginAdmin() {
+    const pass = document.getElementById('adminPass').value;
+    if (pass === 'admin123') {
+      document.getElementById('step-admin-login').classList.add('hidden');
+      document.getElementById('step-admin-dashboard').classList.remove('hidden');
+      loadAdminDashboard();
+    } else {
+      alert("Senha incorreta!");
+    }
+  }
+
+  function loadAdminDashboard() {
+    const records = JSON.parse(localStorage.getItem('vocational_results') || '[]');
+    const tbody = document.getElementById('results-body');
+    tbody.innerHTML = '';
+
+    if(records.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Nenhum registro encontrado.</td></tr>';
+      return;
     }
 
-    function initChatOptions() {
-      const container = document.getElementById('chatOptions');
-      container.innerHTML = '';
-      faqData.forEach((item, index) => {
-        const btn = document.createElement('button');
-        btn.innerText = item.q;
-        btn.onclick = () => responderFAQ(index);
-        container.appendChild(btn);
-      });
+    records.forEach(r => {
+      const row = `<tr>
+        <td>${r.date}</td>
+        <td>${r.name}</td>
+        <td>${r.classGroup}</td>
+        <td>${r.email}</td>
+        <td>${r.ra}</td>
+        <td><strong>${r.resultPrimary}</strong></td>
+        <td>${r.resultSecondary}</td>
+      </tr>`;
+      tbody.innerHTML += row;
+    });
+  }
+
+  function exportCSV() {
+    const records = JSON.parse(localStorage.getItem('vocational_results') || '[]');
+    if (records.length === 0) {
+      alert("Não há dados para exportar.");
+      return;
     }
 
-    function responderFAQ(index) {
-      const chatBody = document.getElementById('chatBody');
-      const item = faqData[index];
+    let csv = "Data;Nome;Turma;Email;RA;Opcao_Principal;Segunda_Opcao\n";
+    records.forEach(r => {
+      csv += `"${r.date}";"${r.name}";"${r.classGroup}";"${r.email}";"${r.ra}";"${r.resultPrimary}";"${r.resultSecondary}"\n`;
+    });
 
-      const msgUser = document.createElement('div');
-      msgUser.className = 'msg msg-user';
-      msgUser.innerText = item.q;
-      chatBody.appendChild(msgUser);
+    const blob = new Blob(["\ufeff" + csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `relatorio_orientacao_vocacional.csv`;
+    link.click();
+  }
 
-      setTimeout(() => {
-        const msgBot = document.createElement('div');
-        msgBot.className = 'msg msg-bot';
-        msgBot.innerText = item.a;
-        chatBody.appendChild(msgBot);
-        chatBody.scrollTop = chatBody.scrollHeight;
-      }, 300);
-
-      chatBody.scrollTop = chatBody.scrollHeight;
+  function clearData() {
+    if (confirm("Tem certeza que deseja apagar todos os registros do relatório?")) {
+      localStorage.removeItem('vocational_results');
+      loadAdminDashboard();
     }
+  }
+</script>
 
-    renderAgendamentos();
-    renderListaPacientes();
-    initChatOptions();
-  </script>
 </body>
 </html>
