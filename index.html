@@ -9,9 +9,9 @@
       --primary: #2563eb;
       --primary-hover: #1d4ed8;
       --bg: #f8fafc;
-      --card-bg: #ffffff;
+      --card-bg: rgba(255, 255, 255, 0.93);
       --text: #1e293b;
-      --border: #e2e8f0;
+      --border: #cbd5e1;
     }
 
     * { 
@@ -23,25 +23,34 @@
     }
 
     body { 
-      background-color: var(--bg); 
+      /* IMAGEM DE FUNDO DA ESCOLA COM OVERLAY */
+      background: linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.65)), 
+                  url('escola.jpg') center center / cover no-repeat fixed;
       color: var(--text); 
       padding: 12px; 
       line-height: 1.5; 
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .container { 
+      width: 100%;
       max-width: 800px; 
-      margin: 0 auto; 
+      margin: 20px auto; 
       background: var(--card-bg); 
-      padding: 20px; 
-      border-radius: 12px; 
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
+      padding: 24px; 
+      border-radius: 16px; 
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); 
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
     }
     
     h1 { font-size: 1.6rem; color: #0f172a; margin-bottom: 8px; }
     h2 { font-size: 1.3rem; color: #0f172a; margin-bottom: 8px; }
     h3 { font-size: 1.1rem; color: #0f172a; margin-bottom: 12px; }
-    .subtitle { color: #64748b; font-size: 0.95rem; margin-bottom: 20px; }
+    .subtitle { color: #475569; font-size: 0.95rem; margin-bottom: 20px; }
 
     .form-group { margin-bottom: 16px; }
     label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; }
@@ -51,8 +60,8 @@
       padding: 12px 14px; 
       border: 1px solid var(--border); 
       border-radius: 8px; 
-      font-size: 16px; /* Evita zoom automático no iOS */
-      background-color: #fff;
+      font-size: 16px;
+      background-color: rgba(255, 255, 255, 0.95);
       appearance: none;
       -webkit-appearance: none;
     }
@@ -95,7 +104,6 @@
 
     .question { margin-bottom: 20px; }
     
-    /* Lista de Opções para Celular */
     .options-list {
       display: flex;
       flex-direction: column;
@@ -131,7 +139,6 @@
     .progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
     .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
 
-    /* Cards do Resultado */
     .result-card {
       background-color: #ffffff;
       border: 1px solid var(--border);
@@ -166,9 +173,8 @@
 
     .hidden { display: none; }
     .admin-link { margin-top: 25px; text-align: center; font-size: 14px; }
-    .admin-link a { color: #64748b; text-decoration: underline; cursor: pointer; }
+    .admin-link a { color: #475569; text-decoration: underline; cursor: pointer; font-weight: 500; }
 
-    /* Tabela Responsiva */
     .table-responsive {
       width: 100%;
       overflow-x: auto;
@@ -176,16 +182,16 @@
       margin-top: 15px;
       border-radius: 8px;
       border: 1px solid var(--border);
+      background: #ffffff;
     }
 
     table { width: 100%; border-collapse: collapse; min-width: 600px; }
     th, td { border: 1px solid var(--border); padding: 10px; text-align: left; font-size: 13px; }
     th { background-color: #f1f5f9; font-weight: 600; }
 
-    /* Ajustes específicos para telas acima de 600px */
     @media (min-width: 600px) {
       body { padding: 30px 20px; }
-      .container { padding: 30px; }
+      .container { padding: 32px; }
       .btn-group { flex-direction: row; }
       .btn-group button { width: auto; }
       .result-card img { height: 200px; }
@@ -201,7 +207,7 @@
   <!-- ETAPA 1: DADOS DO ALUNO -->
   <div id="step-student-info">
     <h1>Orientação Vocacional</h1>
-    <p class="subtitle">Preencha seus dados para iniciar o teste de afinidade para os cursos técnicos.</p>
+    <p class="subtitle">Preencha seus dados para iniciar o teste de afinidade para a escolha do seu curso.</p>
     
     <form id="student-form">
       <div class="form-group">
@@ -239,23 +245,22 @@
     </div>
   </div>
 
-  <!-- ETAPA 2: QUESTIONÁRIO DE 10 PERGUNTAS (TEXTO PURO) -->
+  <!-- ETAPA 2: QUESTIONÁRIO -->
   <div id="step-quiz" class="hidden">
     <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
-    <h2>Questionário de Afinidade</h2>
+    <h2>Questionário de Afinidade (<span id="q-number">1</span>/20)</h2>
     <p class="subtitle">Escolha a opção que melhor descreve seu perfil em cada situação.</p>
     <div id="quiz-container"></div>
     <button id="btn-next" onclick="nextQuestion()" style="margin-top: 15px;">Próxima Pergunta</button>
   </div>
 
-  <!-- ETAPA 3: EXIBIÇÃO DO RESULTADO (COM IMAGENS) -->
+  <!-- ETAPA 3: RESULTADO -->
   <div id="step-result" class="hidden">
     <h2>Seu Resultado</h2>
     <p class="subtitle">Com base nas suas respostas, identificamos a seguinte afinidade profissional:</p>
 
-    <!-- Recomendação Principal -->
     <div class="result-card">
-      <img id="res-primary-img" src="" alt="Imagem do curso principal">
+      <img id="res-primary-img" src="" alt="Imagem da opção principal">
       <div class="result-card-content">
         <span class="result-badge primary">1ª Opção Recomendada</span>
         <div class="result-title" id="res-primary-name"></div>
@@ -263,9 +268,8 @@
       </div>
     </div>
 
-    <!-- Segunda Opção -->
     <div class="result-card">
-      <img id="res-secondary-img" src="" alt="Imagem do segundo curso">
+      <img id="res-secondary-img" src="" alt="Imagem da segunda opção">
       <div class="result-card-content">
         <span class="result-badge secondary">2ª Opção Recomendada</span>
         <div class="result-title" id="res-secondary-name"></div>
@@ -273,7 +277,7 @@
       </div>
     </div>
 
-    <p style="margin-top: 15px; font-size: 0.85rem; color: #64748b; text-align: center;">
+    <p style="margin-top: 15px; font-size: 0.85rem; color: #475569; text-align: center;">
       * Seus dados e seu resultado foram registrados com sucesso no sistema.
     </p>
 
@@ -332,132 +336,225 @@
 </div>
 
 <script>
-  // DETALHES DOS CURSOS COM IMAGENS EXCLUSIVAS PARA A TELA DE RESULTADOS
+  // Cadastro dos perfis com as novas propostas (DS 35%, FAR 30%, ENF 15%, ADM 5%, VEN 5%, ELE 1%, REG 9%)
   const courseDetails = {
     DS: {
-      name: "Desenvolvimento de Sistemas",
-      desc: "Sua maior afinidade está na resolução de problemas lógicos, criação de softwares, algoritmos, automação digital e tecnologia.",
+      name: "Desenvolvimento de Sistemas (35%)",
+      desc: "Sua maior afinidade está na resolução de problemas lógicos, criação de softwares, desenvolvimento web/mobile, inteligência artificial e tecnologia.",
       image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80"
     },
     FAR: {
-      name: "Farmácia",
+      name: "Farmácia (30%)",
       desc: "Seu perfil demonstra grande interesse pelo rigor científico, biossegurança, manipulação de compostos químicos e controle de qualidade de medicamentos.",
       image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=800&q=80"
     },
-    ELE: {
-      name: "Eletrônica",
-      desc: "Você demonstra forte inclinação prática para circuitos, hardware, automação, microcontroladores e manutenção técnica.",
-      image: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&w=800&q=80"
-    },
     ENF: {
-      name: "Enfermagem",
-      desc: "Seu perfil valoriza o cuidado humano, biossegurança, primeiros socorros e a rotina assistencial em saúde.",
+      name: "Enfermagem / Saúde (15%)",
+      desc: "Seu perfil valoriza o cuidado humano direto, biossegurança, primeiros socorros e a rotina assistencial em saúde pública e privada.",
       image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80"
     },
+    REG: {
+      name: "Ensino Regular - Não Técnico (9%)",
+      desc: "Seu perfil é voltado para a formação propedêutica geral e acadêmica tradicional, sem foco imediato em formação técnica profissionalizante.",
+      image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=800&q=80"
+    },
     ADM: {
-      name: "Administração",
-      desc: "Sua afinidade é voltada para a gestão de rotinas, organização de processos, planilhas e visão corporativa.",
+      name: "Administração (5%)",
+      desc: "Sua afinidade é voltada para a gestão de rotinas corporativas, organização de processos, finanças e liderança empresarial.",
       image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80"
     },
     VEN: {
-      name: "Vendas",
-      desc: "Você apresenta características de comunicação, persuasão, técnicas comerciais e alcance de metas de mercado.",
+      name: "Vendas (5%)",
+      desc: "Você apresenta características marcantes de comunicação, negociação comercial, prospecção e relacionamento com clientes.",
       image: "https://images.unsplash.com/photo-1556742049-0a674d812328?auto=format&fit=crop&w=800&q=80"
+    },
+    ELE: {
+      name: "Eletrônica (1%)",
+      desc: "Você demonstra inclinação específica para circuitos elétricos, automação industrial, robótica e manutenção de hardware.",
+      image: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&w=800&q=80"
     }
   };
 
-  // PERGUNTAS (SEM IMAGENS NAS OPÇÕES)
+  // Perguntas ajustadas para refletir a proporção solicitada
   const questions = [
     {
-      title: "1. Ao se deparar com um problema novo, qual abordagem você prefere?",
+      title: "1. Ao se deparar com um problema novo, qual área mais chama sua atenção?",
       options: [
-        { text: "Entender a lógica por trás do problema e desenvolver uma solução computacional/digital.", course: "DS" },
-        { text: "Analisar as propriedades químicas, biológicas e a precisão do problema.", course: "FAR" },
-        { text: "Verificar o funcionamento físico de equipamentos, cabos ou circuitos elétricos.", course: "ELE" },
-        { text: "Ajudar e dar suporte imediato às pessoas envolvidas.", course: "ENF" }
+        { text: "Criar um algoritmo ou aplicativo para automatizar a solução.", course: "DS" },
+        { text: "Analisar os componentes químicos ou fórmulas envolvidas.", course: "FAR" },
+        { text: "Focar nos estudos das disciplinas tradicionais gerais (História, Biologia, Línguas).", course: "REG" },
+        { text: "Estruturar uma planilha de organização e processos corporativos.", course: "ADM" }
       ]
     },
     {
-      title: "2. Qual atividade em um laboratório te deixaria mais motivado?",
+      title: "2. Qual ambiente de aprendizado desperta seu interesse?",
       options: [
-        { text: "Analisar substâncias químicas, dosagens e a composição de fármacos.", course: "FAR" },
-        { text: "Desenvolver algoritmos e programas de computador em um ambiente de código.", course: "DS" },
-        { text: "Fazer montagem de placas eletrônicas, soldagem e testes com multímetro.", course: "ELE" },
-        { text: "Praticar simulações de cuidados de saúde, curativos e primeiros socorros.", course: "ENF" }
+        { text: "Laboratório de informática criando linhas de código.", course: "DS" },
+        { text: "Laboratório analítico para desenvolvimento de compostos farmacêuticos.", course: "FAR" },
+        { text: "Ambiente hospitalar ou de atendimento e cuidado à saúde.", course: "ENF" },
+        { text: "Sala de aula focada em conteúdos teóricos gerais para o vestibular/ENEM.", course: "REG" }
       ]
     },
     {
-      title: "3. Qual destas áreas de conhecimento você acha mais instigante?",
+      title: "3. Qual tema desperta mais a sua curiosidade científica e tecnológica?",
       options: [
-        { text: "Linguagens de programação, bancos de dados e inteligência artificial.", course: "DS" },
-        { text: "Farmacologia, química orgânica, biofísica e controle de qualidade.", course: "FAR" },
-        { text: "Sistemas embarcados, automação de circuitos e microcontroladores.", course: "ELE" },
-        { text: "Anatomia humana, biossegurança e assistência hospitalar.", course: "ENF" },
-        { text: "Organização de planilhas e rotinas de escritório.", course: "ADM" }
+        { text: "Linguagens de programação e inteligência artificial.", course: "DS" },
+        { text: "Composição de fármacos, cosméticos e vacinas.", course: "FAR" },
+        { text: "Técnicas de biossegurança e assistência à saúde do paciente.", course: "ENF" },
+        { text: "Bancadas de hardware, microcontroladores e circuitos eletrônicos.", course: "ELE" }
       ]
     },
     {
-      title: "4. Como você prefere realizar suas tarefas principais?",
+      title: "4. Em um projeto escolar, qual responsabilidade você prefere?",
       options: [
-        { text: "Concentrado em frente ao computador resolvendo desafios de raciocínio lógico.", course: "DS" },
-        { text: "Seguindo rígidas normas de biossegurança e medições precisas em laboratório.", course: "FAR" },
-        { text: "Manipulando ferramentas, peças físicas e instrumentos de bancada.", course: "ELE" },
-        { text: "Lidando diretamente com pessoas e zelando pela saúde delas.", course: "ENF" }
+        { text: "Desenvolver o site ou sistema de suporte do trabalho.", course: "DS" },
+        { text: "Analisar as propriedades químicas e reações do experimento.", course: "FAR" },
+        { text: "Atuar nas técnicas diretas de socorro e bem-estar do grupo.", course: "ENF" },
+        { text: "Negociar recursos e apresentar o projeto aos avaliadores.", course: "VEN" }
       ]
     },
     {
-      title: "5. Se você fosse apresentar um projeto de feira de ciências, sobre o que seria?",
+      title: "5. Que tipo de habilidade prática você prioriza desenvolver?",
       options: [
-        { text: "Pesquisa em biotecnologia sobre o uso de princípios ativos na manipulação de remédios.", course: "FAR" },
-        { text: "Um aplicativo ou sistema web interativo criado por você para resolver uma demanda da escola.", course: "DS" },
-        { text: "Um dispositivo automatizado com sensores e microcontroladores.", course: "ELE" },
-        { text: "Uma maquete e demonstração prática sobre primeiros socorros e prevenção de doenças.", course: "ENF" }
+        { text: "Programar em linguagens modernas (Python, Java, JS).", course: "DS" },
+        { text: "Manipular substâncias e insumos químicos de laboratório.", course: "FAR" },
+        { text: "Construir softwares eficientes para resolução de problemas.", course: "DS" },
+        { text: "Aprofundar os estudos gerais do ensino médio sem foco técnico imediato.", course: "REG" }
       ]
     },
     {
-      title: "6. Qual tipo de conteúdo técnico você gosta de pesquisar por curiosidade?",
+      title: "6. O que você acha mais recompensador em um projeto?",
       options: [
-        { text: "Tutoriais sobre linguagens de programação, desenvolvimento web e tecnologia.", course: "DS" },
-        { text: "Notícias e artigos sobre a indústria farmacêutica e descobertas em medicamentos.", course: "FAR" },
-        { text: "Vídeos sobre manutenção de aparelhos, diagramas elétricos e placas.", course: "ELE" },
-        { text: "Vídeos e conteúdos sobre procedimentos cirúrgicos e saúde pública.", course: "ENF" },
-        { text: "Dicas de técnicas de vendas e estratégias de negociação.", course: "VEN" }
+        { text: "Ver um programa de computador rodar sem erros.", course: "DS" },
+        { text: "Garantir a eficácia de uma fórmula manipulada.", course: "FAR" },
+        { text: "Prestar assistência técnica humanizada na saúde.", course: "ENF" },
+        { text: "Atingir metas comerciais e negociações de vendas.", course: "VEN" }
       ]
     },
     {
-      title: "7. O que traria mais sentimento de dever cumprido ao final de um dia de trabalho?",
+      title: "7. Onde você se imagina atuando futuramente?",
       options: [
-        { text: "Construir um código limpo, sem erros e ver um sistema funcionando perfeitamente.", course: "DS" },
-        { text: "Garantir a precisão absoluta e a segurança na preparação de fórmulas de medicamentos.", course: "FAR" },
-        { text: "Diagnosticar um defeito elétrico complexo e reparar o equipamento.", course: "ELE" },
-        { text: "Saber que prestou um atendimento humanizado e fez a diferença na vida de um paciente.", course: "ENF" }
+        { text: "Na área de tecnologia da informação e inovação digital.", course: "DS" },
+        { text: "Na indústria farmacêutica ou manipulação de remédios.", course: "FAR" },
+        { text: "Criando soluções web e aplicações em nuvem.", course: "DS" },
+        { text: "Gerenciando processos de administração e recursos humanos.", course: "ADM" }
       ]
     },
     {
-      title: "8. Durante um trabalho prático em grupo, qual papel você assume naturally?",
+      title: "8. Em um grupo de trabalho, qual função você desempenha melhor?",
       options: [
-        { text: "O responsável pela parte lógica, digital ou automação do projeto.", course: "DS" },
-        { text: "O responsável pelo rigor dos dados científicos, fórmulas e conformidade com as regras.", course: "FAR" },
-        { text: "O responsável pela montagem prática e manuseio de equipamentos.", course: "ELE" },
-        { text: "O que cuida do acolhimento e bem-estar de todos os participantes.", course: "ENF" }
+        { text: "Especialista em lógica de dados e ferramentas de software.", course: "DS" },
+        { text: "Revisor atento aos procedimentos e testes de bancada química.", course: "FAR" },
+        { text: "Profissional de cuidado focado em biossegurança e saúde.", course: "ENF" },
+        { text: "Estudante dedicado a integrar conteúdos teóricos multidisciplinares.", course: "REG" }
       ]
     },
     {
-      title: "9. Qual ambiente de trabalho te atrai mais?",
+      title: "9. Qual conjunto de ferramentas desperta sua atenção?",
       options: [
-        { text: "Empresas de tecnologia, salas de desenvolvimento de software ou trabalho home-office.", course: "DS" },
-        { text: "Laboratórios de manipulação, indústria de cosméticos ou farmácias de grande porte.", course: "FAR" },
-        { text: "Bancadas de manutenção, indústrias técnicas ou laboratórios de automação.", course: "ELE" },
-        { text: "Hospitais, postos de saúde, clínicas médicas ou prontos-socorros.", course: "ENF" }
+        { text: "Ambientes de desenvolvimento (IDE), bancos de dados e código.", course: "DS" },
+        { text: "Microscópios, balanças de precisão e vidrarias científicas.", course: "FAR" },
+        { text: "Ferramentas digitais para desenvolvimento de sistemas web.", course: "DS" },
+        { text: "Instrumentos de medição de circuitos e solda eletrônica.", course: "ELE" }
       ]
     },
     {
-      title: "10. Em uma situação emergencial que exige ação imediata, o que você faria?",
+      title: "10. Se pudesse fazer um treinamento rápido hoje, qual seria?",
       options: [
-        { text: "Investigar falhas lógicas e reescrever parâmetros no computador para restaurar um sistema.", course: "DS" },
-        { text: "Calcular com exatidão a dosagem ou substância neutra para estancar um problema biológico.", course: "FAR" },
-        { text: "Isolar um painel de energia e reparar componentes para evitar um apagão.", course: "ELE" },
-        { text: "Aplicar manobras de primeiros socorros para estabilizar a saúde de alguém.", course: "ENF" }
+        { text: "Desenvolvimento de Aplicações e Lógica de Programação.", course: "DS" },
+        { text: "Controle de Qualidade em Medicamentos e Química.", course: "FAR" },
+        { text: "Primeiros Socorros e Práticas de Enfermagem.", course: "ENF" },
+        { text: "Técnicas de Comunicação e Fechamento de Vendas.", course: "VEN" }
+      ]
+    },
+    {
+      title: "11. Como você prefere estruturar seus raciocínios?",
+      options: [
+        { text: "Raciocínio lógico focado em algoritmos e programação.", course: "DS" },
+        { text: "Investigação rigorosa apoiada no método científico químico.", course: "FAR" },
+        { text: "Estruturação computacional para automação de tarefas.", course: "DS" },
+        { text: "Estudo teórico direcionado à matriz tradicional do Ensino Médio.", course: "REG" }
+      ]
+    },
+    {
+      title: "12. Qual resultado te traria maior satisfação pessoal?",
+      options: [
+        { text: "Publicar um aplicativo funcional e bem avaliado.", course: "DS" },
+        { text: "Desenvolver um produto dermatológico ou farmacêutico eficaz.", course: "FAR" },
+        { text: "Promover a reabilitação física e bem-estar de um paciente.", course: "ENF" },
+        { text: "Organizar com sucesso a gestão financeira de um empreendimento.", course: "ADM" }
+      ]
+    },
+    {
+      title: "13. Qual disciplina ou módulo você acha mais instigante?",
+      options: [
+        { text: "Algoritmos, Banco de Dados e Engenharia de Software.", course: "DS" },
+        { text: "Química Orgânica, Farmacologia e Biologia Molecular.", course: "FAR" },
+        { text: "Programação Orientada a Objetos e Desenvolvimento Web.", course: "DS" },
+        { text: "Estrutura do Ensino Regular Propedêutico sem técnica específica.", course: "REG" }
+      ]
+    },
+    {
+      title: "14. Qual destas atividades você prefere no seu cotidiano?",
+      options: [
+        { text: "Automatizar processos do dia a dia usando softwares.", course: "DS" },
+        { text: "Estudar composições de substâncias e seus efeitos no corpo.", course: "FAR" },
+        { text: "Atuar na área assistencial e de cuidados de saúde.", course: "ENF" },
+        { text: "Planejar estratégias para vendas e atração de clientes.", course: "VEN" }
+      ]
+    },
+    {
+      title: "15. O que você valoriza no aprendizado escolar?",
+      options: [
+        { text: "Aprender linguagens de programação e lógica avançada.", course: "DS" },
+        { text: "Compreender dosagens, manipulações e soluções químicas.", course: "FAR" },
+        { text: "Construir sistemas computacionais e plataformas online.", course: "DS" },
+        { text: "Testar e consertar placas eletrônicas e componentes.", course: "ELE" }
+      ]
+    },
+    {
+      title: "16. Qual tipo de publicação ou leitura atrai sua atenção?",
+      options: [
+        { text: "Artigos sobre linguagens de programação e tecnologia.", course: "DS" },
+        { text: "Revistas científicas sobre indústria farmacêutica e saúde.", course: "FAR" },
+        { text: "Manuais de biossegurança e assistência na área da saúde.", course: "ENF" },
+        { text: "Conteúdos sobre administração, liderança e economia.", course: "ADM" }
+      ]
+    },
+    {
+      title: "17. Como prefere colaborar em uma equipe multidisciplinar?",
+      options: [
+        { text: "Desenvolvendo as ferramentas digitais necessárias.", course: "DS" },
+        { text: "Garantindo a precisão dos ensaios de laboratório.", course: "FAR" },
+        { text: "Criando a arquitetura de software da solução.", course: "DS" },
+        { text: "Focando na assimilação teórica e preparação para vestibulares.", course: "REG" }
+      ]
+    },
+    {
+      title: "18. Qual afirmação melhor se alinha com seu perfil?",
+      options: [
+        { text: "Gosto de transformar desafios em código computacional.", course: "DS" },
+        { text: "Tenho fascínio por química, saúde e controle de remédios.", course: "FAR" },
+        { text: "Tenho interesse no cuidado em saúde e primeiro atendimento.", course: "ENF" },
+        { text: "Gosto da área comercial, negociação e relacionamento.", course: "VEN" }
+      ]
+    },
+    {
+      title: "19. Se você fosse fundar uma iniciativa, ela estaria na área de:",
+      options: [
+        { text: "Softwares, aplicativos e inteligência artificial.", course: "DS" },
+        { text: "Produtos farmacêuticos, cosméticos e fitoterapia.", course: "FAR" },
+        { text: "Soluções tecnológicas para automação de processos.", course: "DS" },
+        { text: "Gestão administrativa e planejamento de empresas.", course: "ADM" }
+      ]
+    },
+    {
+      title: "20. O que traz mais orgulho na execução de um projeto?",
+      options: [
+        { text: "Entregar uma aplicação digital rápida e sem falhas.", course: "DS" },
+        { text: "Manipular e testar um composto farmacêutico seguro.", course: "FAR" },
+        { text: "Aprofundar a formação geral do ensino básico tradicional.", course: "REG" },
+        { text: "Resolver falhas em circuitos eletrônicos e equipamentos.", course: "ELE" }
       ]
     }
   ];
@@ -466,9 +563,8 @@
   let currentQuestion = 0;
   let selectedOption = null;
   
-  let scores = { DS: 0, FAR: 0, ELE: 0, ENF: 0, ADM: 0, VEN: 0 };
+  let scores = { DS: 0, FAR: 0, ENF: 0, REG: 0, ADM: 0, VEN: 0, ELE: 0 };
 
-  // ETAPA 1: VALIDAR FORMULÁRIO
   document.getElementById('student-form').addEventListener('submit', function(e) {
     e.preventDefault();
     studentData = {
@@ -484,11 +580,10 @@
     renderQuestion();
   });
 
-  // RENDERIZAR PERGUNTA (EM TEXTO PURO)
   function renderQuestion() {
     const q = questions[currentQuestion];
     
-    // Atualizar barra de progresso
+    document.getElementById('q-number').innerText = currentQuestion + 1;
     const progressPercent = ((currentQuestion) / questions.length) * 100;
     document.getElementById('progress-fill').style.width = `${progressPercent}%`;
 
@@ -512,7 +607,6 @@
     selectedOption = course;
   }
 
-  // NAVEGAÇÃO E PONTUAÇÃO
   function nextQuestion() {
     if (!selectedOption) {
       alert("Por favor, selecione uma resposta antes de continuar.");
@@ -529,9 +623,9 @@
     }
   }
 
-  // FINALIZAR E EXIBIR RESULTADOS COM IMAGENS
   function finishQuiz() {
-    const priorityOrder = ['FAR', 'DS', 'ELE', 'ENF', 'ADM', 'VEN'];
+    // Ordem de desempate priorizando a distribuição estabelecida
+    const priorityOrder = ['DS', 'FAR', 'ENF', 'REG', 'ADM', 'VEN', 'ELE'];
 
     const sorted = Object.keys(scores).sort((a, b) => {
       if (scores[b] !== scores[a]) {
@@ -546,12 +640,10 @@
     studentData.resultPrimary = courseDetails[primaryKey].name;
     studentData.resultSecondary = courseDetails[secondaryKey].name;
 
-    // Salvar no localStorage
     let records = JSON.parse(localStorage.getItem('vocational_results') || '[]');
     records.push(studentData);
     localStorage.setItem('vocational_results', JSON.stringify(records));
 
-    // Exibir telas de resultado
     document.getElementById('res-primary-img').src = courseDetails[primaryKey].image;
     document.getElementById('res-primary-name').innerText = courseDetails[primaryKey].name;
     document.getElementById('res-primary-desc').innerText = courseDetails[primaryKey].desc;
@@ -565,7 +657,6 @@
     window.scrollTo(0, 0);
   }
 
-  // PAINEL ADMINISTRATIVO
   function showAdminLogin() {
     document.getElementById('step-student-info').classList.add('hidden');
     document.getElementById('step-admin-login').classList.remove('hidden');
