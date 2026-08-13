@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Sistema de Orientação Vocacional - Cursos Técnicos</title>
+  <title>Sistema de Orientação Vocacional - Escolha do Itinerário AG 2027</title>
   <style>
     :root {
       --primary: #2563eb;
@@ -45,10 +45,24 @@
       backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.4);
     }
+
+    /* Título Fixo Global */
+    .global-main-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 10px;
+    }
     
-    h1 { font-size: 1.6rem; color: #0f172a; margin-bottom: 8px; }
+    h1 { font-size: 1.5rem; color: #0f172a; margin-bottom: 8px; }
     h2 { font-size: 1.3rem; color: #0f172a; margin-bottom: 8px; }
     h3 { font-size: 1.1rem; color: #0f172a; margin-bottom: 12px; }
+
     .subtitle { color: #475569; font-size: 0.95rem; margin-bottom: 20px; }
 
     .form-group { margin-bottom: 16px; }
@@ -170,6 +184,17 @@
 
     .result-title { font-size: 1.2rem; font-weight: bold; color: #0f172a; margin-bottom: 6px; }
 
+    .saving-status {
+      text-align: center;
+      padding: 12px;
+      background: #e0f2fe;
+      color: #0369a1;
+      border-radius: 8px;
+      font-weight: 600;
+      margin-top: 15px;
+      font-size: 0.95rem;
+    }
+
     .hidden { display: none; }
     .admin-link { margin-top: 25px; text-align: center; font-size: 14px; }
     .admin-link a { color: #475569; text-decoration: underline; cursor: pointer; font-weight: 500; }
@@ -194,8 +219,9 @@
       .btn-group { flex-direction: row; }
       .btn-group button { width: auto; }
       .result-card img { height: 200px; }
-      h1 { font-size: 1.8rem; }
-      h2 { font-size: 1.5rem; }
+      .global-main-title { font-size: 1.8rem; }
+      h1 { font-size: 1.6rem; }
+      h2 { font-size: 1.4rem; }
     }
   </style>
 </head>
@@ -203,9 +229,12 @@
 
 <div class="container">
   
+  <!-- TÍTULO FIXO PRESENTE EM TODAS AS ETAPAS -->
+  <div class="global-main-title">Escolha do Itinerário AG 2027</div>
+
   <!-- ETAPA 1: DADOS DO ALUNO -->
   <div id="step-student-info">
-    <h1>Orientação Vocacional</h1>
+    <h2>Identificação do Aluno</h2>
     <p class="subtitle">Preencha seus dados para iniciar o teste de afinidade para a escolha do seu curso.</p>
     
     <form id="student-form">
@@ -275,15 +304,15 @@
       </div>
     </div>
 
-    <div style="margin-top: 20px;">
-      <button onclick="saveResultAndReset()" class="btn-success">Gravar a Resposta</button>
+    <div id="save-status" class="saving-status">
+      Enviando suas respostas e gravando no sistema...
     </div>
   </div>
 
   <!-- PAINEL DO ADMINISTRADOR -->
   <div id="step-admin-login" class="hidden">
     <h2>Área Administrativa</h2>
-    <p class="subtitle">Digite a senha do administrador para visualizar os relatórios.</p>
+    <p class="subtitle">Digite a senha do administrador para visualizar os relatórios locais.</p>
     <div class="form-group">
       <label for="adminPass">Senha de Acesso</label>
       <input type="password" id="adminPass" placeholder="Senha padrão: admin123">
@@ -295,12 +324,12 @@
   </div>
 
   <div id="step-admin-dashboard" class="hidden">
-    <h2>Relatório de Escolhas</h2>
-    <p class="subtitle">Alunos cadastrados e seus respectivos resultados.</p>
+    <h2>Relatório de Escolhas (Cópia Local)</h2>
+    <p class="subtitle">Alunos cadastrados localmente neste dispositivo.</p>
     
     <div class="btn-group">
-      <button onclick="exportCSV()" class="btn-success">Exportar CSV</button>
-      <button onclick="clearData()" class="btn-danger">Limpar Registros</button>
+      <button onclick="exportCSV()" class="btn-success">Exportar CSV Local</button>
+      <button onclick="clearData()" class="btn-danger">Limpar Registros Locais</button>
     </div>
     
     <div class="table-responsive">
@@ -555,7 +584,6 @@
   let currentQuestion = 0;
   let scores = { DS: 0, FAR: 0, ENF: 0, REG: 0, ADM: 0, VEN: 0, ELE: 0 };
 
-  // Validação Estrita no Envio do Formulário Inicial com Trava de Duplicidade
   document.getElementById('student-form').addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -569,14 +597,13 @@
       return;
     }
 
-    // VERIFICAÇÃO DE RESPOSTA ANTERIOR (RA OU E-MAIL)
     const records = JSON.parse(localStorage.getItem('vocational_results') || '[]');
     const alreadyResponded = records.some(record => 
       record.ra.trim().toLowerCase() === ra || record.email.trim().toLowerCase() === email
     );
 
     if (alreadyResponded) {
-      alert("Atenção: Já existe um registro gravado com este RA ou E-mail. Cada aluno pode enviar o teste apenas uma vez.");
+      alert("Atenção: Já existe um registro gravado com este RA ou E-mail neste navegador.");
       return;
     }
 
@@ -656,15 +683,49 @@
     document.getElementById('step-quiz').classList.add('hidden');
     document.getElementById('step-result').classList.remove('hidden');
     window.scrollTo(0, 0);
+
+    // Dispara a gravação automática no Google Forms
+    autoSaveResult();
   }
 
-  function saveResultAndReset() {
+  // GRAVAÇÃO AUTOMÁTICA DIRETA NO GOOGLE FORMS
+  async function autoSaveResult() {
+    const statusDiv = document.getElementById('save-status');
+
+    // 1. Grava histórico local para manter a trava no navegador do aluno
     let records = JSON.parse(localStorage.getItem('vocational_results') || '[]');
     records.push(studentData);
     localStorage.setItem('vocational_results', JSON.stringify(records));
 
-    alert("Resposta gravada com sucesso!");
-    location.reload();
+    const googleFormsUrl = "https://docs.google.com/forms/d/e/1FAIpQLScFxoYp0PAdbWlwMgGA15GeGeXb1ii7Rjy3EjUM0yz38s2LDw/formResponse";
+
+    const formData = new URLSearchParams();
+    formData.append("entry.810784288", studentData.name);
+    formData.append("entry.601291129", studentData.classGroup);
+    formData.append("entry.1418141909", studentData.email);
+    formData.append("entry.723389088", studentData.ra);
+    formData.append("entry.1983102625", studentData.resultPrimary);
+    formData.append("entry.772349435", studentData.resultSecondary);
+
+    try {
+      await fetch(googleFormsUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: formData.toString()
+      });
+
+      statusDiv.style.background = "#dcfce7";
+      statusDiv.style.color = "#166534";
+      statusDiv.innerText = "✓ Suas respostas foram salvas com sucesso na planilha!";
+    } catch (error) {
+      console.error("Erro ao enviar ao Google Forms:", error);
+      statusDiv.style.background = "#fef2f2";
+      statusDiv.style.color = "#991b1b";
+      statusDiv.innerText = "Aviso: Suas respostas foram salvas localmente neste dispositivo.";
+    }
   }
 
   function showAdminLogin() {
@@ -689,7 +750,7 @@
     tbody.innerHTML = '';
 
     if(records.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Nenhum registro encontrado.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">Nenhum registro encontrado localmente.</td></tr>';
       return;
     }
 
@@ -727,7 +788,7 @@
   }
 
   function clearData() {
-    if (confirm("Tem certeza que deseja apagar todos os registros do relatório?")) {
+    if (confirm("Tem certeza que deseja apagar todos os registros da memória local deste navegador?")) {
       localStorage.removeItem('vocational_results');
       loadAdminDashboard();
     }
