@@ -336,46 +336,46 @@
 </div>
 
 <script>
-  // Cadastro dos perfis com as novas propostas (DS 35%, FAR 30%, ENF 15%, ADM 5%, VEN 5%, ELE 1%, REG 9%)
+  // Cadastro dos perfis sem exibição de porcentagens
   const courseDetails = {
     DS: {
-      name: "Desenvolvimento de Sistemas (35%)",
+      name: "Desenvolvimento de Sistemas",
       desc: "Sua maior afinidade está na resolução de problemas lógicos, criação de softwares, desenvolvimento web/mobile, inteligência artificial e tecnologia.",
       image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80"
     },
     FAR: {
-      name: "Farmácia (30%)",
+      name: "Farmácia",
       desc: "Seu perfil demonstra grande interesse pelo rigor científico, biossegurança, manipulação de compostos químicos e controle de qualidade de medicamentos.",
       image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=800&q=80"
     },
     ENF: {
-      name: "Enfermagem / Saúde (15%)",
+      name: "Enfermagem / Saúde",
       desc: "Seu perfil valoriza o cuidado humano direto, biossegurança, primeiros socorros e a rotina assistencial em saúde pública e privada.",
       image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=800&q=80"
     },
     REG: {
-      name: "Ensino Regular - Não Técnico (9%)",
+      name: "Ensino Regular - Não Técnico",
       desc: "Seu perfil é voltado para a formação propedêutica geral e acadêmica tradicional, sem foco imediato em formação técnica profissionalizante.",
       image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=800&q=80"
     },
     ADM: {
-      name: "Administração (5%)",
+      name: "Administração",
       desc: "Sua afinidade é voltada para a gestão de rotinas corporativas, organização de processos, finanças e liderança empresarial.",
       image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80"
     },
     VEN: {
-      name: "Vendas (5%)",
+      name: "Vendas",
       desc: "Você apresenta características marcantes de comunicação, negociação comercial, prospecção e relacionamento com clientes.",
       image: "https://images.unsplash.com/photo-1556742049-0a674d812328?auto=format&fit=crop&w=800&q=80"
     },
     ELE: {
-      name: "Eletrônica (1%)",
+      name: "Eletrônica",
       desc: "Você demonstra inclinação específica para circuitos elétricos, automação industrial, robótica e manutenção de hardware.",
       image: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?auto=format&fit=crop&w=800&q=80"
     }
   };
 
-  // Perguntas ajustadas para refletir a proporção solicitada
+  // Perguntas do questionário
   const questions = [
     {
       title: "1. Ao se deparar com um problema novo, qual área mais chama sua atenção?",
@@ -565,13 +565,25 @@
   
   let scores = { DS: 0, FAR: 0, ENF: 0, REG: 0, ADM: 0, VEN: 0, ELE: 0 };
 
+  // Validação Estrita no Envio do Formulário Inicial
   document.getElementById('student-form').addEventListener('submit', function(e) {
     e.preventDefault();
+
+    const name = document.getElementById('fullName').value.trim();
+    const classGroup = document.getElementById('classGroup').value;
+    const email = document.getElementById('email').value.trim();
+    const ra = document.getElementById('ra').value.trim();
+
+    if (!name || !classGroup || !email || !ra) {
+      alert("Por favor, preencha todos os campos obrigatórios antes de iniciar o teste.");
+      return;
+    }
+
     studentData = {
-      name: document.getElementById('fullName').value,
-      classGroup: document.getElementById('classGroup').value,
-      email: document.getElementById('email').value,
-      ra: document.getElementById('ra').value,
+      name: name,
+      classGroup: classGroup,
+      email: email,
+      ra: ra,
       date: new Date().toLocaleString('pt-BR')
     };
 
@@ -624,7 +636,6 @@
   }
 
   function finishQuiz() {
-    // Ordem de desempate priorizando a distribuição estabelecida
     const priorityOrder = ['DS', 'FAR', 'ENF', 'REG', 'ADM', 'VEN', 'ELE'];
 
     const sorted = Object.keys(scores).sort((a, b) => {
