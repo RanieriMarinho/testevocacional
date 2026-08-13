@@ -249,9 +249,8 @@
   <div id="step-quiz" class="hidden">
     <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
     <h2>Questionário de Afinidade (<span id="q-number">1</span>/20)</h2>
-    <p class="subtitle">Escolha a opção que melhor descreve seu perfil em cada situação.</p>
+    <p class="subtitle">Clique na opção que melhor descreve seu perfil em cada situação.</p>
     <div id="quiz-container"></div>
-    <button id="btn-next" onclick="nextQuestion()" style="margin-top: 15px;">Próxima Pergunta</button>
   </div>
 
   <!-- ETAPA 3: RESULTADO -->
@@ -561,7 +560,6 @@
 
   let studentData = {};
   let currentQuestion = 0;
-  let selectedOption = null;
   
   let scores = { DS: 0, FAR: 0, ENF: 0, REG: 0, ADM: 0, VEN: 0, ELE: 0 };
 
@@ -609,30 +607,23 @@
     });
     html += `</div></div>`;
     document.getElementById('quiz-container').innerHTML = html;
-    selectedOption = null;
     window.scrollTo(0, 0);
   }
 
   function selectOption(card, course) {
     document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
-    selectedOption = course;
-  }
+    
+    scores[course]++;
 
-  function nextQuestion() {
-    if (!selectedOption) {
-      alert("Por favor, selecione uma resposta antes de continuar.");
-      return;
-    }
-
-    scores[selectedOption]++;
-
-    currentQuestion++;
-    if (currentQuestion < questions.length) {
-      renderQuestion();
-    } else {
-      finishQuiz();
-    }
+    setTimeout(() => {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        renderQuestion();
+      } else {
+        finishQuiz();
+      }
+    }, 200);
   }
 
   function finishQuiz() {
