@@ -23,7 +23,6 @@
     }
 
     body { 
-      /* IMAGEM DE FUNDO DA ESCOLA COM OVERLAY */
       background: linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.65)), 
                   url('escola.jpg') center center / cover no-repeat fixed;
       color: var(--text); 
@@ -276,12 +275,8 @@
       </div>
     </div>
 
-    <p style="margin-top: 15px; font-size: 0.85rem; color: #475569; text-align: center;">
-      * Seus dados e seu resultado foram registrados com sucesso no sistema.
-    </p>
-
     <div style="margin-top: 20px;">
-      <button onclick="location.reload()" class="btn-secondary">Finalizar / Voltar ao Início</button>
+      <button onclick="saveResultAndReset()" class="btn-success">Gravar a Resposta</button>
     </div>
   </div>
 
@@ -335,7 +330,6 @@
 </div>
 
 <script>
-  // Cadastro dos perfis sem exibição de porcentagens
   const courseDetails = {
     DS: {
       name: "Desenvolvimento de Sistemas",
@@ -374,7 +368,6 @@
     }
   };
 
-  // Perguntas do questionário
   const questions = [
     {
       title: "1. Ao se deparar com um problema novo, qual área mais chama sua atenção?",
@@ -560,20 +553,30 @@
 
   let studentData = {};
   let currentQuestion = 0;
-  
   let scores = { DS: 0, FAR: 0, ENF: 0, REG: 0, ADM: 0, VEN: 0, ELE: 0 };
 
-  // Validação Estrita no Envio do Formulário Inicial
+  // Validação Estrita no Envio do Formulário Inicial com Trava de Duplicidade
   document.getElementById('student-form').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const name = document.getElementById('fullName').value.trim();
     const classGroup = document.getElementById('classGroup').value;
-    const email = document.getElementById('email').value.trim();
-    const ra = document.getElementById('ra').value.trim();
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const ra = document.getElementById('ra').value.trim().toLowerCase();
 
     if (!name || !classGroup || !email || !ra) {
       alert("Por favor, preencha todos os campos obrigatórios antes de iniciar o teste.");
+      return;
+    }
+
+    // VERIFICAÇÃO DE RESPOSTA ANTERIOR (RA OU E-MAIL)
+    const records = JSON.parse(localStorage.getItem('vocational_results') || '[]');
+    const alreadyResponded = records.some(record => 
+      record.ra.trim().toLowerCase() === ra || record.email.trim().toLowerCase() === email
+    );
+
+    if (alreadyResponded) {
+      alert("Atenção: Já existe um registro gravado com este RA ou E-mail. Cada aluno pode enviar o teste apenas uma vez.");
       return;
     }
 
@@ -642,10 +645,6 @@
     studentData.resultPrimary = courseDetails[primaryKey].name;
     studentData.resultSecondary = courseDetails[secondaryKey].name;
 
-    let records = JSON.parse(localStorage.getItem('vocational_results') || '[]');
-    records.push(studentData);
-    localStorage.setItem('vocational_results', JSON.stringify(records));
-
     document.getElementById('res-primary-img').src = courseDetails[primaryKey].image;
     document.getElementById('res-primary-name').innerText = courseDetails[primaryKey].name;
     document.getElementById('res-primary-desc').innerText = courseDetails[primaryKey].desc;
@@ -657,6 +656,15 @@
     document.getElementById('step-quiz').classList.add('hidden');
     document.getElementById('step-result').classList.remove('hidden');
     window.scrollTo(0, 0);
+  }
+
+  function saveResultAndReset() {
+    let records = JSON.parse(localStorage.getItem('vocational_results') || '[]');
+    records.push(studentData);
+    localStorage.setItem('vocational_results', JSON.stringify(records));
+
+    alert("Resposta gravada com sucesso!");
+    location.reload();
   }
 
   function showAdminLogin() {
